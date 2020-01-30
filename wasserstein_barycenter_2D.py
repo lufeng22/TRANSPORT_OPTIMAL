@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from math import*
 
 
-def main(N, gamma, alpha):
+def main_2D(N, gamma, alpha):
     
     x = np.linspace(0,1,N)
     y = np.linspace(0,1,N)
@@ -19,19 +19,29 @@ def main(N, gamma, alpha):
     
     fig = plt.figure(figsize = [10,10])
     X,Y = np.meshgrid(x,y)
-    ax = fig.add_subplot(111, projection = '3d')
-    ax.plot_surface(X,Y,BARY, cmap = 'hot')
+    ax = fig.add_subplot(111)#, projection = '3d')
+    ax.contour(X,Y,BARY, cmap = 'hot')
+    ax.contour(X,Y,GAUSS1, cmap = 'hot')
+    ax.contour(X,Y,GAUSS2, cmap = 'hot')
     plt.xlabel("x")
     plt.ylabel("y")
     plt.title("BARYCENTRE avec alpha = {}" .format(alpha))
     
     fig = plt.figure(figsize = [10,10])
     X,Y = np.meshgrid(x,y)
-    ax = fig.add_subplot(111, projection = '3d')
-    ax.plot_surface(X,Y,GAUSS1, cmap = 'hot')
+    ax = fig.add_subplot(111)#, projection = '3d')
+    ax.contour(X,Y,GAUSS1, cmap = 'hot')
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.title("INITIAL")
+    plt.title("rho_0")
+    
+    fig = plt.figure(figsize = [10,10])
+    X,Y = np.meshgrid(x,y)
+    ax = fig.add_subplot(111, projection = '3d')
+    ax.plot_surface(X,Y,GAUSS2, cmap = 'hot')
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.title("rho_1")
     
     plt.show()
     

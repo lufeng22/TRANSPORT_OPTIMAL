@@ -1,18 +1,18 @@
 import numpy as np
 import matplotlib.pylab as plt
-import ot
 from math import*
 
 def main(gamma):
 
     N = 100
-    G = matrix_gaussienne(N)
-
     x = np.linspace(0,1,N)
-    t = np.arange(0,1.1,0.1)
+    G = matrix_gaussienne(N, x)
+
+    
+    t = np.array([0,0.25,0.5,0.75,1])
     plt.figure(figsize=(10,10))
-    plt.plot(x,G[:,0],'+', 'r', label = 'Gaussienne départ')
-    plt.plot(x,G[:,1],'+', 'r', label = 'Gausiienne arrivée')
+    plt.plot(x,G[:,0],'r', label = 'Gaussienne départ')
+    plt.plot(x,G[:,1],'b', label = 'Gausiienne arrivée')
     for i in range(np.size(t)):
         alpha = t[i]
         ALPHA = np.array([1 - alpha,alpha])
@@ -63,22 +63,26 @@ def heat_kernel(N,gamma):
     t = np.linspace(0,1,N)
     X,Y = np.meshgrid(t,t)
     dist = np.abs(X - Y)**2
-    H = np.exp(-dist/gamma)
+    H = np.exp(-(dist**2)/(2*gamma))
 
     return H
 
 def H(x,N,gamma):
     return np.dot(heat_kernel(N,gamma),x)
 
-def matrix_gaussienne(N):
+def matrix_gaussienne(N,x):
+    
+    G1 = np.zeros(N)
+    G2 = np.zeros(N)
 
-    G1 = ot.datasets.make_1D_gauss(N, m = 20, s=4)
+    for i in range(N):
+        
+        G1[i] = np.exp(-(1./2)*((x[i] - 0.4)/0.08)**2)
+        G2[i] = np.exp(-(1./2)*((x[i] - 0.6)/0.08)**2)
+        
     G1 = G1/np.linalg.norm(G1)
-    print(np.linalg.norm(G1))
-
-    G2 = ot.datasets.make_1D_gauss(N, m = 60, s=10)
     G2 = G2/np.linalg.norm(G2)
-    print(np.linalg.norm(G2))
+
 
     G = np.vstack((G1,G2)).T
 
