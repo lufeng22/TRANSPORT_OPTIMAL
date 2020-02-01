@@ -8,18 +8,23 @@ def main(gamma):
     x = np.linspace(0,1,N)
     G = matrix_gaussienne(N, x)
 
-    
+
     t = np.array([0,0.25,0.5,0.75,1])
     plt.figure(figsize=(10,10))
     plt.plot(x,G[:,0],'r', label = 'Gaussienne départ')
     plt.plot(x,G[:,1],'b', label = 'Gausiienne arrivée')
+
+    BARY = barycenter(G,[0.5,0.5],gamma)
+    plt.plot(x, BARY)
+    """
     for i in range(np.size(t)):
         alpha = t[i]
         ALPHA = np.array([1 - alpha,alpha])
         BARY = barycenter(G,ALPHA,gamma)
         plt.plot(x, BARY)
+    """
     plt.legend()
-    plt.title('Barycentres pour gamma = {}'.format(gamma))
+    #plt.title('Barycentres pour gamma = {}'.format(gamma))
     plt.tight_layout()
     plt.show()
 
@@ -31,7 +36,7 @@ def main(gamma):
     plt.tight_layout()
     plt.show()"""
 
-    return 0
+    return BARY
 
 def barycenter(G,ALPHA,gamma):
 
@@ -44,7 +49,7 @@ def barycenter(G,ALPHA,gamma):
     W = np.ones((N,k))
     D = np.zeros((N,k))
 
-    for j in range(k):
+    for j in range(100):
         MU = np.ones(N)
         for i in range(k):
             HEAT_V = H(a*V[:,i],N,gamma)
@@ -71,15 +76,15 @@ def H(x,N,gamma):
     return np.dot(heat_kernel(N,gamma),x)
 
 def matrix_gaussienne(N,x):
-    
+
     G1 = np.zeros(N)
     G2 = np.zeros(N)
 
     for i in range(N):
-        
-        G1[i] = np.exp(-(1./2)*((x[i] - 0.4)/0.08)**2)
-        G2[i] = np.exp(-(1./2)*((x[i] - 0.6)/0.08)**2)
-        
+
+        G1[i] = np.exp(-(1./2)*((x[i] - 0.2)/0.08)**2)
+        G2[i] = np.exp(-(1./2)*((x[i] - 0.8)/0.08)**2)
+
     G1 = G1/np.linalg.norm(G1)
     G2 = G2/np.linalg.norm(G2)
 
